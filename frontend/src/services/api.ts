@@ -6,6 +6,15 @@ import type {
   LogEntry,
   CommandExecuteRequest,
   ScriptExecuteRequest,
+  TimePeriod,
+  DashboardSummary,
+  DashboardKPI,
+  TrendData,
+  ServerDistribution,
+  CommandDistribution,
+  HeatmapData,
+  RadarData,
+  ResourceUsage,
 } from '../types';
 
 const api = axios.create({
@@ -63,6 +72,79 @@ export const logsApi = {
     api.get('/logs/dates').then(r => r.data),
   getByTask: (taskId: string): Promise<LogEntry> =>
     api.get(`/logs/${taskId}`).then(r => r.data),
+};
+
+export const dashboardApi = {
+  getSummary: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+    use_cache?: boolean;
+  }): Promise<DashboardSummary> =>
+    api.get('/dashboard/summary', { params }).then(r => r.data),
+
+  getKPI: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+  }): Promise<DashboardKPI> =>
+    api.get('/dashboard/kpi', { params }).then(r => r.data),
+
+  getTrend: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+    granularity?: 'auto' | 'hour' | 'day';
+  }): Promise<TrendData> =>
+    api.get('/dashboard/trend', { params }).then(r => r.data),
+
+  getServerDistribution: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+  }): Promise<ServerDistribution[]> =>
+    api.get('/dashboard/server-distribution', { params }).then(r => r.data),
+
+  getCommandDistribution: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+    top_n?: number;
+  }): Promise<CommandDistribution[]> =>
+    api.get('/dashboard/command-distribution', { params }).then(r => r.data),
+
+  getHeatmap: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+  }): Promise<HeatmapData> =>
+    api.get('/dashboard/heatmap', { params }).then(r => r.data),
+
+  getRadar: (params: {
+    period: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+  }): Promise<RadarData> =>
+    api.get('/dashboard/radar', { params }).then(r => r.data),
+
+  getResource: (): Promise<ResourceUsage> =>
+    api.get('/dashboard/resource').then(r => r.data),
+
+  getDrilldown: (type: string, params: {
+    period?: TimePeriod;
+    start_date?: string;
+    end_date?: string;
+    server_id?: string;
+    status?: string;
+    limit?: number;
+  }): Promise<LogEntry[]> =>
+    api.get(`/dashboard/drilldown/${type}`, { params }).then(r => r.data),
+
+  refreshCache: (): Promise<{ message: string }> =>
+    api.post('/dashboard/cache/refresh').then(r => r.data),
+
+  getCacheStatus: (): Promise<{ cached_keys: string[]; ttl_seconds: number; timestamps: Record<string, number> }> =>
+    api.get('/dashboard/cache/status').then(r => r.data),
 };
 
 export default api;

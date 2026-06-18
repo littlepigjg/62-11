@@ -5,11 +5,13 @@ import {
   CodeOutlined,
   FileTextOutlined,
   HistoryOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import MachineManagement from './components/MachineManagement';
 import TerminalPanel from './components/TerminalPanel';
 import ScriptLibrary from './components/ScriptLibrary';
 import LogViewer from './components/LogViewer';
+import Dashboard from './components/Dashboard';
 import { useAppStore } from './store';
 import { wsService } from './services/websocket';
 
@@ -28,6 +30,16 @@ const App: React.FC = () => {
   ).length;
 
   const tabItems = [
+    {
+      key: 'dashboard',
+      label: (
+        <span>
+          <DashboardOutlined />
+          决策仪表盘
+        </span>
+      ),
+      children: <Dashboard />,
+    },
     {
       key: 'execute',
       label: (

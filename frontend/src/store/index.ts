@@ -44,7 +44,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   templates: [],
   activeTasks: new Map(),
   taskOutputs: new Map(),
-  currentTab: 'execute',
+  currentTab: 'dashboard',
 
   setServers: (servers) => set({ servers }),
   addServer: (server) => set(state => {
